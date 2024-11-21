@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>provisoire</title>
+    <script src = "FileManage.js"> </script>
+</head>
+<body>
+    <section id = "section"> Here's a little something</section>
+</body>
+
+<script type = "module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import  {getStorage,ref, uploadBytes} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js";
+import {collection, query, where, getDocs,getFirestore} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+// Configure Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyA3NwGgMkzgWdQ0U9sbMDsTrqGYOwRpQfg" ,
+    authDomain: "hearhere-a907b.firebaseapp.com",
+    projectId: "hearhere-a907b",
+    storageBucket: "hearhere-a907b.firebasestorage.app",
+    messagingSenderId: "477854437797",
+    appId: "1:477854437797:web:cbe47e4a7f18543bbbd84c",
+    measurementId: "G-B2LYSVQSGY"
+};
+// Create firebase app and obtain firestore
+const app = initializeApp(firebaseConfig);
+const database = getFirestore(app);
+
+// Get all the documents (markInfo) from collection markUpload
+const querySnapshot = await getDocs(collection(database, "markUpload"));
+
+
+
+querySnapshot.forEach((doc) => { 
+    let latitude = doc.get("latitude");
+    let longitude = doc.get("longitude")
+    console.log(doc.id, " => ", doc.get("markName"));
+    const section = document.getElementById("section");
+    section.append(latitude)
+});
+
+
+</script>
+</html>

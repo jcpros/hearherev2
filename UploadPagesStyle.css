@@ -1,0 +1,46 @@
+
+body {
+    height: 100vh;
+    margin: 0;
+    background-color: rgb(254, 255, 248);
+    /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
+}
+
+
+/* form {
+    background-color: aqua;
+    width: 50%;
+} */
+
+form {
+    background-color: lightgreen;
+    border-radius: 13px; 
+    position: relative;
+    margin: 0 auto;
+    width: 50%;
+    min-height: 20%;
+    border-style: dashed;
+    padding: 10%;
+    border-color: darkgreen;
+
+}
+
+.formMargin {
+    margin-bottom: 20px;
+} 
+
+input[type="file"] {
+    display: inline-block;
+    border-radius: 3px ;
+    border: none;
+  } 
+
+/* .audioUploadButton{
+    border: 3px solid;
+    border-color: darkgreen;
+    border-style: dashed;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;  
+    background-color: rgb(255, 255, 255);
+} */
