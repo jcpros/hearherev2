@@ -1,0 +1,26 @@
+#map{
+    width: 70vw;
+    height: 60vh;
+    margin-left: 15%;
+    margin-top: 8% ; 
+    position: relative; 
+}
+
+h1 {
+    text-align: center;
+    position: relative;
+}
+
+p{
+    text-align: center;
+    position: relative;
+    margin-bottom: 10%;
+}
+
+/* 
+{
+    "rules": {
+      ".read": "now < 1730520000000",
+      ".write": "now < 1730520000000",
+    }
+  } */

@@ -1,0 +1,174 @@
+<!-- 
+ HearHere Main Map
+ John-Clarence Prosper
+
+ This page allows users to explore the interactive map and
+ click on markers to access the marker audio listeners
+
+ Controls:
+ -  Zoom to reduce see individual markers
+ -  Click to see name of marker
+ -  Double-click to open marker's audio listener
+
+ Uses:
+ Leaflet.js
+ Bootstrap
+ Firestore & Cloud Storage (Firebase)
+ -->
+<!DOCTYPE html>
+<html lang="eng">
+
+<head>
+  <!-- General Styling -->
+  <link rel="stylesheet" href="MapPageStyle.css">
+  <link href="MarkerListenPageStyle.css" rel="stylesheet">
+
+  <!-- Leaflet Library Import -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- For Marker Clustering -->
+  <link rel="stylesheet" href="Leaflet.markercluster-1.4.1\dist\MarkerCluster.css" />
+  <link rel="stylesheet" href="Leaflet.markercluster-1.4.1\dist\MarkerCluster.Default.css" />
+  <script src="Leaflet.markercluster-1.4.1/dist/leaflet.markercluster-src.js"> </script>
+
+  <!-- Map Styling -->
+  <style>
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+  </style>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE-edge">
+  <title> Map Explorer </title>
+  <meta name="viewport" content="width-device-width, initial-scale-1.0">
+</head>
+
+<body>
+  <h1 id="title">Listen to the World! </h1>
+  <p> Double-Click on a mark</br>See what happens ; &#41;</p>
+  <div id="map" class="mainMap">
+  </div>
+  <!--   This div will contain the popup when the user double-clicks the mark -->
+  <div id="modalDiv"></div>
+
+  <script type="module">
+
+    // Importing Firebase Functions
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js";
+    import { collection, query, where, getDocs, getFirestore } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+    // Configure Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyA3NwGgMkzgWdQ0U9sbMDsTrqGYOwRpQfg",
+      authDomain: "hearhere-a907b.firebaseapp.com",
+      projectId: "hearhere-a907b",
+      storageBucket: "hearhere-a907b.firebasestorage.app",
+      messagingSenderId: "477854437797",
+      appId: "1:477854437797:web:cbe47e4a7f18543bbbd84c",
+      measurementId: "G-B2LYSVQSGY"
+    };
+    // Create firebase app and Access Firestore in Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getFirestore(app);
+
+    // Access Storage in Firebase and Create a ref for the storage
+    const storage = getStorage(app);
+
+    // Get all the documents (markInfo) from collection markUpload
+    const querySnapshot = await getDocs(collection(database, "markUpload"));
+
+    // Initialize and visualize map
+    const map = L.map('map').setView([45.49539563050029, -73.57772497670183], 8);
+
+    // Create a Cluster Group
+    const markers = L.markerClusterGroup();
+
+    // Add the map tile layer (the look)
+    var mainTiles = L.tileLayer('https://api.maptiler.com/maps/aquarelle/{z}/{x}/{y}.png?key=je7BvvIYMGMLvHIYQRun', {
+      attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+    });
+    mainTiles.addTo(map);
+
+
+    //For loop that goes through each form in the doc stored in Firestore
+    querySnapshot.forEach((doc) => {
+
+      //Setting variables containing the mark data by getting info from the doc
+      let markDescription = doc.get("markDescription");
+      let audioFileName = doc.get("audioStorageRef")
+      let latitude = doc.get("latitude");
+      let longitude = doc.get("longitude");
+      let markName = doc.get("markName");
+
+      //Populating the Map with markers 
+      const marker = L.marker([latitude, longitude]);
+      marker.bindPopup(markName); // add popup with name
+      markers.addLayer(marker); // add marker to cluster group
+      map.addLayer(markers); // add cluster group to map
+
+      //Retrieving the audio file from Firebase Storage
+      const pathRef = ref(storage, audioFileName);
+
+      // This function makes a popup appear when double-clicking on the marker
+      marker.on('dblclick', () => {
+
+        // Create New popup
+        const newModal = document.createElement("dialog");
+        newModal.classList.add("music-container")
+
+        //Create and add mark title to popup
+        const markTitle = document.createElement("h4");
+        markTitle.innerText = markName
+        newModal.appendChild(markTitle)
+
+        //Create and add audio element to popup
+        const audioDiv = document.createElement("div")
+        audioDiv.classList.add("audio-div");
+        getDownloadURL(pathRef).then((url) => {
+          const audioPlayer = new Audio(url)
+          audioPlayer.controls = "controls"
+          audioDiv.appendChild(audioPlayer)
+
+        })
+        newModal.appendChild(audioDiv)
+
+        // Create and add mark description to popup
+        const descritptionDiv = document.createElement("div")
+        descritptionDiv.classList.add("mark-div")
+        descritptionDiv.innerText = markDescription
+        newModal.appendChild(descritptionDiv)
+
+        // Create a close button
+        const closeButton = document.createElement("button"); // here, i would need to give this button a certain id so i can style it and make it fit the theme
+        closeButton.innerText = "close";
+        closeButton.id = "closeButton"
+
+        // Appending the created to modalDiv
+        const modalDiv = document.getElementById("modalDiv");
+        newModal.appendChild(closeButton);
+        modalDiv.appendChild(newModal);
+        newModal.showModal()
+
+        //This function closes the popup when clicking the close button
+        closeButton.addEventListener("click", () => {
+          newModal.remove();
+        })
+
+      });
+    });
+  </script>
+</body>
+
+</html>

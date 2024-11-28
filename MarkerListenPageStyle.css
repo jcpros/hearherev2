@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    margin: 0;
+    background-color: rgb(254, 255, 248)
+}
+
+.music-container {
+    background-color: lightgreen;
+    border-radius: 20px; 
+    position: relative;
+    width: 30vw;
+    min-height: 20vh;
+    border-style: dashed;
+    border-color:darkgreen;
+}
+
+img {
+    width: 50%;
+    height: 50%;
+    object-fit: cover;
+    margin-left: 20%;
+    display: inline-block;
+} 
+
+.audio-div {
+  margin-left:15%;
+  position: relative;
+}
+
+h4 {
+    text-align: center;
+    margin-top: 10% ; 
+}
+
+h1 {
+    text-align: center;
+}
+
+.mark-div{
+    /* background-color: rgb(190, 236, 253); */
+    width: 60%;
+    height: 200px;
+    margin-left: 20%;
+    overflow: auto;
+}
+
+.mark-div p {
+    width: 80%;
+    text-wrap: wrap;
+    overflow-wrap: break-word;
+    margin-left: 10%; 
+    /* text-decoration: underline dotted; */
+}
+
+#closeButton{
+    border: none;
+}
+
+#logoDiv{
+    width: 15%;
+    height: auto;
+    margin-top: 50px;
+}
+
+#logo{
+    max-width: 0%;
+    height: auto;
+}
+
+#homeDiv{
+    position: absolute;
+    margin-top: 100px;
+}
+
+
+/* #modalDiv{
+    width: 1000px;
+    height: 1000px;
+    background-color: brown;
+} */

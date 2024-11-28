@@ -1,0 +1,54 @@
+
+body {
+    height: 100vh;
+    margin: 0;
+    background-color: rgb(254, 255, 248);
+    /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
+}
+
+form {
+    background-color: lightgreen;
+    border-radius: 13px; 
+    position: relative;
+    margin: 0 auto;
+    width: 50%;
+    min-height: 20%;
+    border-style: dashed;
+    padding: 10%;
+    border-color: darkgreen;
+
+}
+
+.formMargin {
+    margin-bottom: 20px;
+} 
+
+label {
+    color:darkgreen;
+    font-weight: bold;
+  }  
+
+#uploadButton{ 
+    background-color: rgb(254, 255, 248);
+    color:darkgreen;
+    font-weight: bold;
+    border-style: none;
+    margin-top: 10px;
+} 
+
+#loadingWheel{
+    width: 20px;
+    height: 20px;
+    border: 2px solid;
+    border-color: rgb(28, 78, 231) transparent transparent transparent;
+    margin: 0 auto;
+    border-radius: 60%;
+    animation: spin 1s linear infinite;
+    display: none;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg)
+    }
+}
